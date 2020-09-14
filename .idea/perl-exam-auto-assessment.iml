@@ -6,6 +6,9 @@
     </option>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <perl5>
+      <path value="$MODULE_DIR$/lib" type="perl-library" />
+    </perl5>
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="inheritedJdk" />
