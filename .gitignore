@@ -143,3 +143,4 @@ inc/
 /*.zip
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,perl
+/AssignmentDataFiles/MasterFiles/Generated/
