@@ -137,17 +137,26 @@ if ($bare_content =~ $exam_parser) {
     # print $all_questions[0]->{"question"}->{"text"};
 
     # Variant 2:
-    my %question0 = %{$all_questions[0]};
-    print $question0{"question"}->{"text"};
+    my %q0 = %{$all_questions[0]};
+    # print $q0{"question"}->{"text"};
 
-    # Getting the first CORRECT answer:
-    my $correct_answer0;
-    for my $answer (@{$question0{'answer'}}) {
-        if ($answer->{'checkbox'} eq "[X]") {
-            $correct_answer0 = $answer->{text};
+
+    # Getting all questions and their corresponding correct answer:
+    for my $q_ref (@all_questions) {
+        my %q = %{$q_ref};
+
+        print "QUESTION " . $q{"question"}->{"question_number"} . ": " . $q{"question"}->{"text"};
+
+        # Getting the CORRECT answer:
+        my $correct_answer;
+        for my $answer (@{$q{'answer'}}) {
+            if ($answer->{'checkbox'} eq "[X]") {
+                $correct_answer = $answer->{text};
+            }
         }
+        say " -> CORRECT ANSWER:  $correct_answer";
     }
-    print " -> CORRECT ANSWER:  $correct_answer0";
+
 
 }
 else {
