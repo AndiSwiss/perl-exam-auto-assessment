@@ -34,13 +34,9 @@ if (@ARGV < 2) {
 else {
     # Take provided filepath:
     $master_path = $ARGV[0];
-    # say("All student exams: ");
     for my $sf (@ARGV[1..((scalar @ARGV) -1)]){
         push @student_file_paths, $sf;
-        # say $sf;
     }
-    # say "\n";
-    # say join(", ", @student_file_paths);
 }
 
 
@@ -75,11 +71,15 @@ sub normalize($string){
 }
 
 # Compares 2 normalized strings and returns their edit distance;
+# Returns 0 for exact match, and a positive number for an inexact match (where the positive number is the editing distance)
+# A return value of -1 means not equal!
 sub compare($s1, $s2, $question_number){
     $s1 = normalize($s1);
     $s2 = normalize($s2);
     # say $s1 . " vs. " . $s2;
     my $maxDist = floor(length( $s2) * 0.1);
+
+    # Trinary magic so that the eq compare returns the same as the editingDistance
     my $ret = $maxDist ? edistance($s1, $s2, $maxDist) : ($s1 eq $s2 ? 0 : -1);
 
     if($ret > 0) {
