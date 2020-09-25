@@ -3,15 +3,15 @@
 #### Table of Content
 - [General](#general)
   - [Team](#team)
-- [Usage & Installation](#usage--installation)
-  - [(CPAN-)modules Used](#-cpan-modules-used)
-  - [Running the Scripts](#running-the-scripts)
 - [High-Level Overview](#high-level-overview)
   - [Implemented Features](#implemented-features)
   - [Data Structure](#data-structure)
   - [Data Structure](#data-structure)
   - [General Code Structure](#general-code-structure)
   - [Problems](#problems)
+- [Usage & Installation](#usage--installation)
+  - [(CPAN-)modules Used](#-cpan-modules-used)
+  - [Running the Scripts](#running-the-scripts)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents 
 generated with markdown-toc</a></i></small>
@@ -30,6 +30,47 @@ generated with markdown-toc</a></i></small>
 ### Team
 - Andreas Ambühl - https://github.com/AndiSwiss
 - Luca Fluri - https://github.com/lucafluri
+
+
+---
+
+## High-Level Overview
+
+### Implemented Features
+- Create empty tests (with randomized order of answers of each question)
+- Generate score(s) of the provided exam(s), including analysis and colored output of:
+  - Filename (yellow)
+  - 'Missing answer' (red)
+  - 'Inexact match' (blue)
+  - 'score' including correct and answered questions (green)
+  - Note: we chose a colored output for easy identification of the various parts
+- Statistics:
+  - The statistics are generated and printed automatically when calculating the score(s) 
+    of file(s) 
+
+### Data Structure
+- We decided to mostly use a nested hash-/array-structure, which we were able to generate 
+  with the descriptive approach of a regex-grammar shown by Dr. Damian Conway. You can find 
+  the regex-grammar in our custom module [lib/Andiluca/Exam_Parser.pm](lib/Andiluca/Exam_Parser.pm). 
+  This main data structure contains the following structured elements:
+  - 'exam'
+    - an array of 'exam_component', each containing:
+      - 'question_and_answers'
+        - 'question'
+          - 'question_number'
+          - 'text' (containing the question-text)
+        - an array of 'answer', each containing:
+          - 'checkbox' (marked or unmarked)
+          - 'text' (containing the answer-text)
+      - 'decoration' (basically all lines not containing questions and answers)
+- Other elements, such as 'empty_line' are recognized but not saved in the generated 
+  hash-structure.
+   
+
+### General Code Structure
+
+
+### Problems
 
 
 ---
@@ -73,43 +114,3 @@ generated with markdown-toc</a></i></small>
   - With this, you can quickly try the statistics functionality with some stub test 
     data (no pre-calculations needed)
 
-
----
-
-## High-Level Overview
-
-### Implemented Features
-- Create empty tests (with randomized order of answers of each question)
-- Generate score(s) of the provided exam(s), including analysis and colored output of:
-  - Filename (yellow)
-  - 'Missing answer' (red)
-  - 'Inexact match' (blue)
-  - 'score' including correct and answered questions (green)
-  - Note: we chose a colored output for easy identification of the various parts
-- Statistics:
-  - The statistics are generated and printed automatically when calculating the score(s) 
-    of file(s) 
-
-### Data Structure
-- We decided to mostly use a nested hash-/array-structure, which we were able to generate 
-  with the descriptive approach of a regex-grammar shown by Dr. Damian Conway. You can find 
-  the regex-grammar in our custom module [lib/Andiluca/Exam_Parser.pm](lib/Andiluca/Exam_Parser.pm). 
-  This main data structure contains the following structured elements:
-  - 'exam'
-    - an array of 'exam_component', each containing:
-      - 'question_and_answers'
-        - 'question'
-          - 'question_number'
-          - 'text' (containing the question-text)
-        - an array of 'answer', each containing:
-          - 'checkbox' (marked or unmarked)
-          - 'text' (containing the answer-text)
-      - 'decoration' (basically all lines not containing questions and answers)
-- Other elements, such as 'empty_line' are recognized but not saved in the generated 
-  hash-structure.
-   
-
-### General Code Structure
-
-
-### Problems
