@@ -147,16 +147,6 @@ ________________________________________________________________________________
     [x] ...in all circumstances
 
 
-________________________________________________________________________________
-
-13. To specify a second alternative test after an 'if', the correct keyword is:
-
-    [x] elsif
-    [ ] elif
-    [ ] ormaybe (with no whitespace between the two words)
-    [ ] else if (with any amount of whitespace between the two words)
-    [ ] elseif  (with no whitespace between the two words)
-
 
 ________________________________________________________________________________
 

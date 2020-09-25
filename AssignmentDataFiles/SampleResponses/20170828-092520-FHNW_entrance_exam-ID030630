@@ -100,7 +100,7 @@ ________________________________________________________________________________
     [x] ...does not interpolate variables or backslashed escape sequences
     [ ] ...converts its contents to ASCII, even if they are Unicode characters
     [ ] ...interpolates both variables and backslashed escape sequences
-    [ ] ...only interpolates variables, but not backslashed escape sequences
+    [ ] ...only interpolates variables,@{$qa_master{"answer"}} but not backslashed escape sequences
 
 
 ________________________________________________________________________________
