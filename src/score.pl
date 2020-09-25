@@ -11,7 +11,7 @@ use Term::ANSIColor ('color', 'colored');
 
 # Use/import our custom modules:
 use lib ('lib');                          # Includes local lib-folder -> for custom modules 'Andiluca::...'
-use Andiluca::Useful ('title', 'assert'); # Module with various useful code snippets
+use Andiluca::Useful ('title'); # Module with various useful code snippets
 use Andiluca::Understand_Data_Structure ('understand_data_structure1');
 use Andiluca::Create_Empty_Random_Exam ('create_empty_random_exam');
 use Andiluca::Exam_Parser('parsing_exam');
@@ -148,10 +148,9 @@ sub score_exam($sf, @parsed_exam) {
     # Index Offset used when a Question is missing in the middle of the Exam
     my $master_offset = 0;
     
-    say colored(['yellow'], "\n\n" . "-" x (length($sf) + 1));
-    say colored(['yellow'], $sf . ":");
+    title("$sf:");
 
-    # Loop through masterfile
+    # Loop through master file:
     foreach my $i (0..((scalar @parsed_master)-1)){
 
         if(!exists($parsed_master[$i + $master_offset])){next;}
@@ -205,7 +204,7 @@ sub score_exam($sf, @parsed_exam) {
             }
         }
         
-        # Score Answers
+        # Score answers
         my $count = 0; #Count of X's
         for my $answer (@{$qa_student{'answer'}}) {
             if ($answer->{'checkbox'} =~ /\[\s*[xX]\s*\]/) { # Match all types of X's with Spaces before and after

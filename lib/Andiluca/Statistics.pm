@@ -38,7 +38,7 @@ sub print_statistics($correct_answers_count_total_ref, $answered_questions_count
     $sum_answered += $_ for @answered_total;
 
     # Print the statistics values
-    one_line("Number of analysed tests.................", scalar(@correct_total));
+    one_line("Number of analysed exams.................", scalar(@correct_total));
     say "";
     one_line("Average number of correct answers........", $sum_correct / @correct_total);
     one_line("Minimum.....", $correct_total[0]);

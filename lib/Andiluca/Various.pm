@@ -9,7 +9,7 @@ use Term::ANSIColor ('color', 'colored');
 
 
 # List of exported functions:
-our @EXPORT_OK = ('parse_header', 'parse_decoration_divider', 'get_current_date_time_string', 'read_file');
+our @EXPORT_OK = ('parse_header', 'parse_decoration_divider', 'get_current_date_time_string', 'read_file', 'save_file', 'create_new_file_path');
 
 
 # Parsing the whole header of the exam-file, using a regex:
@@ -65,6 +65,51 @@ sub read_file($filepath) {
     };
     close $fh;
     return $bare_content;
+}
+
+
+# Saves the given multi-line string to the given file-path
+#
+# Parameters:
+#   - $filepath: Path to the file
+# Error Handling:
+#   - Throws exception if file saving fails
+sub save_file($content, $file_path) {
+    open(my $out_fh, ">", $file_path) // die colored([ 'red' ], "\nUnable to open file for write-access '$file_path':\n\t$!\n");
+    say {$out_fh} $content;
+    say colored([ 'green' ], "       Empty Exam-File created in '$file_path'.");
+    close($out_fh);
+}
+
+
+# Constructs the file-path for the new file.
+# The path is generally the same, but with an added subfolder 'Generated'.
+# If the subfolder 'Generated' does not yet exist, it will be created.
+# The file name gets prefixed with date and time.
+# Sample input:
+#     AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt
+# Sample output would be:
+#     AssignmentDataFiles/MasterFiles/Generated/20170904-132602-FHNW_entrance_exam_master_file_2017.txt
+#
+# Parameters:
+#   - $filepath: Path to the file
+# Returns:
+#   - the new file-path for the output file
+sub create_new_file_path($file_path) {
+    # Create subdirectory /Generated, if not yet present:
+    $file_path =~ m%(.*(.*/)*/)[^/]*$%;
+    my $path_generated = $1 . "/Generated";
+    if (!-d $path_generated) {
+        mkdir ($path_generated);
+    }
+
+    # Generate date and time:
+    my $date_and_time = get_current_date_time_string();
+
+    # Create the path for the output-file:
+    $file_path =~ s%/([^/]*)$%/Generated/$date_and_time-$1%;
+
+    return $file_path;
 }
 
 
