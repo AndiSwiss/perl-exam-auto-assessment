@@ -4,14 +4,14 @@ use warnings;
 use diagnostics;
 use Regexp::Grammars;                     # Module for using Grammars in Regex
 use Data::Show;                           # Module for showing content of variables such as hashes
-# use File::Path;    # TODO:  maybe implement this for consistent behaviour on windows?
+use Term::ANSIColor ('color', 'colored');
 
 # Use/import our custom modules:
 use lib ('lib');                          # Includes local lib-folder -> for custom modules 'Andiluca::...'
 use Andiluca::Useful ("title", "assert"); # Module with various useful code snippets
 use Andiluca::Understand_Data_Structure ("understand_data_structure1");
 use Andiluca::Create_Empty_Random_Exam ("create_empty_random_exam");
-
+use Andiluca::Various("parse_header", "parse_decoration_divider");
 
 
 my $path;
@@ -20,9 +20,13 @@ my $path;
 if (@ARGV == 0) {
     # die "Please provide a filepath, such as 'perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt'\n";
 
-    # Use standard-file:
+    # Use one of the standard-files:
     my $file = "FHNW_entrance_exam_master_file_2017.txt";
+    # my $file = "short_exam_master_file.txt";
+
+    # Construct the path:
     $path = "AssignmentDataFiles/MasterFiles/" . $file;
+
 }
 else {
     # Take provided filepath:
@@ -86,6 +90,11 @@ my $exam_parser = qr{
 
 my %parsed;
 
+my $header = parse_header($bare_content);
+my $decoration_line = parse_decoration_divider($bare_content);
+
+
+
 # Run the regex-grammar to create the hash-object:
 if ($bare_content =~ $exam_parser) {
     %parsed = %/; # '%/' is a special variable from the Regexp-module to fetch the created data-structure
@@ -94,13 +103,18 @@ if ($bare_content =~ $exam_parser) {
     # show (%parsed);
 
     # For understanding the data-structure: just print out all the questions and their respective correct answer:
-    understand_data_structure1(\%parsed);
+    # understand_data_structure1(\%parsed);
 
     # Create empty random exam file:
-    my $success = create_empty_random_exam(\%parsed);
-    # if (!defined $success) {
-    #     warn 'create_empty_random_exam(\%parsed) failed!!';
-    # }
+    my $randomized = create_empty_random_exam(\%parsed, $header, $decoration_line);
+    if (!defined $randomized) {
+        warn colored([ 'red' ], 'Method "create_empty_random_exam(\%parsed)" failed!!');
+    } else {
+        say $randomized;
+        # TODO: write the file to disk
+    }
+
+
 
 
 
