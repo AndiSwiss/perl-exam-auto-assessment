@@ -11,6 +11,16 @@ Andreas Ambühl - https://github.com/AndiSwiss
 Luca Fluri - https://github.com/lucafluri
 
 
+## Usage
+- For creating empty tests (with randomized order of answers of each question), use the script `main.pl`:
+  - If no arguments are provided, the script runs with a default file: `perl src/main.pl`
+  - If you provide one argument, the script runs with the given file. Example: `perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt`
+  - The generated empty tests will be created in a subfolder named `/Generated`, inside the directory of the provided file.
+- For generating the score of all the files, use the script `score.pl`:
+  - First parameter: Master-file
+  - Second parameter: Student-file(s)
+  - example: `perl src/score.pl AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt AssignmentDataFiles/SampleResponses/*`
+
 
 ### Caveats
 There is one file which behaves very different on the computer of Luca (with Ubuntu) and my computer (macOS):
