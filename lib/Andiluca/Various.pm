@@ -26,3 +26,6 @@ sub get_current_date_time_string() {
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime();
     return(sprintf("%04d%02d%02d-%02d%02d%02d", 1900 + $year, 1 + $mon, $mday, $hour, $min, $sec));
 }
+
+
+1; # Magic true value that Perl requires for no good reason.

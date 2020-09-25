@@ -122,10 +122,10 @@ if ($bare_content =~ $exam_parser) {
         # Sample output would be:
         #     AssignmentDataFiles/MasterFiles/Generated/20170904-132602-FHNW_entrance_exam_master_file_2017.txt
         $path =~ s%/([^/]*)$%/Generated/$date_and_time-$1%;
-        say $path;
 
         open(my $out_fh, ">", $path) // die colored([ 'red' ], "\nUnable to open file for write-access '$path':\n\t$!\n");
         say {$out_fh} $randomized;
+        say "Empty Exam-File created in '$path'";
         close($out_fh);
     }
 
