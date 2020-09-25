@@ -5,9 +5,10 @@ use warnings;
 use diagnostics;
 use experimental ('signatures');
 use Exporter ('import');
-use Regexp::Grammars; # Module for using Grammars in Regex
+use Regexp::Grammars;               # Module for using Grammars in Regex
 
-our @EXPORT_OK = ('parsing_exam');
+
+our @EXPORT_OK = ('parsing_exam');  # List of exported functions
 
 
 sub parsing_exam($bare_content) {

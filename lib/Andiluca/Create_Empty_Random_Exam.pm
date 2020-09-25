@@ -10,7 +10,7 @@ use List::Util ('shuffle');
 use Term::ANSIColor ('color', 'colored');
 
 
-our @EXPORT_OK = ('create_empty_random_exam');
+our @EXPORT_OK = ('create_empty_random_exam');   # List of exported functions
 
 
 

@@ -7,6 +7,8 @@ use experimental ('signatures');
 use Exporter ('import');
 use Term::ANSIColor ('color', 'colored');
 
+our @EXPORT_OK = ('assert', 'title');     # List of exported functions
+
 
 # ------ #
 # USAGE: #
@@ -27,12 +29,6 @@ use Term::ANSIColor ('color', 'colored');
 #     export PERL5LIB="$HOME/IdeaProjects/FHNW_Perl_course_with_Damian_Conway/lib"
 #
 #  After this, it should work just fine!
-
-
-# --------------------------- #
-# List of exported functions: #
-# --------------------------- #
-our @EXPORT_OK = ('assert', 'title');
 
 
 # ----------------------------------------------------------------- #

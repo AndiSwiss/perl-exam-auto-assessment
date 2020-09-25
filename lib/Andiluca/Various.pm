@@ -7,7 +7,10 @@ use experimental ('signatures');
 use Exporter ('import');
 use Term::ANSIColor ('color', 'colored');
 
+
+# List of exported functions:
 our @EXPORT_OK = ('parse_header', 'parse_decoration_divider', 'get_current_date_time_string', 'read_file');
+
 
 # Parsing the whole header of the file:
 sub parse_header($bare_content) {
