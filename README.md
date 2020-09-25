@@ -9,3 +9,11 @@ for extended project description.
 ## Team
 Andreas Ambühl - https://github.com/AndiSwiss
 Luca Fluri - https://github.com/lucafluri
+
+
+
+### Caveats
+There is one file which behaves very different on the computer of Luca (with Ubuntu) and my computer (macOS):
+If we both run the command 
+`perl src/score.pl AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt AssignmentDataFiles/SampleResponses/20170828-092520-FHNW_entrance_exam-ID039411` (which compares the exam-file with id "ID039411" with the master-file), we get a different result, which we could not 
+find an explanation for.
