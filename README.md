@@ -1,14 +1,26 @@
 # perl-exam-auto-assessment
-This is a small perl script for (semi-)automated assessment of a multiple choice exam in text format.
-
-This project is an assignment for the perl-course held by Dr. Damian Conway from Australia in summer 2020.
-
-See [IntroPerl_project_specification_2020.pdf](IntroPerl_project_specification_2020.pdf) 
+- This is a small perl script for (semi-)automated assessment of a multiple choice exam in text format.
+- This project is an assignment for the perl-course held by Dr. Damian Conway from Australia in summer 2020.
+- See [IntroPerl_project_specification_2020.pdf](IntroPerl_project_specification_2020.pdf) 
 for extended project description.
 
 ## Team
-Andreas Ambühl - https://github.com/AndiSwiss
-Luca Fluri - https://github.com/lucafluri
+- Andreas Ambühl - https://github.com/AndiSwiss
+- Luca Fluri - https://github.com/lucafluri
+
+## (CPAN-)modules used
+- We used the following (CPAN-)modules:
+  - Data::Show
+  - Exporter
+  - Lingua::StopWords
+  - List::Util
+  - POSIX
+  - Regexp::Grammars
+  - Term::ANSIColor
+  - Text::Levenshtein::Damerau
+- We created custom modules -> in the folder `lib/Andiluca`. If you run the perl scripts from the project-root, then
+these modules should be automatically detected: For example `perl src/main.pl` should work, after you installed all
+required CPAN-Modules.
 
 
 ## Usage
@@ -25,7 +37,8 @@ Luca Fluri - https://github.com/lucafluri
   - example: `perl src/score.pl AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt AssignmentDataFiles/SampleResponses/*`
 
 
-### Caveats
+
+## Caveats
 
 - There is one file which behaves very different on the computer of Luca (with Ubuntu) and my computer (macOS):
   - If we both run the command 
