@@ -68,10 +68,47 @@ generated with markdown-toc</a></i></small>
    
 
 ### General Code Structure
+- The starting points are one of the following options:
+  - [src/create.pl](src/create.pl) for creating empty exams with randomized questions.
+  - [src/score.pl](src/score.pl) for scoring (multiple) exams and generating statistics.
+- For better code-readability and -maintainability, we structured the code in various
+  sub-routines. For enhancing, we exported may sub-routines in custom written modules:
+  - [lib/Andiluca/Create_Empty_Random_Exam.pm](lib/Andiluca/Create_Empty_Random_Exam.pm)
+    - `sub create_empty_random_exam(..)`
+  - [lib/Andiluca/Exam_Parser.pm](lib/Andiluca/Exam_Parser.pm)
+    - `sub parsing_exam(..)`
+  - [lib/Andiluca/Statistics.pm](lib/Andiluca/Statistics.pm)
+    - `sub print_statistics(..)`
+    - `sub print_one_line(..)`
+  - [lib/Andiluca/Understand_Data_Structure.pm](lib/Andiluca/Understand_Data_Structure.pm)
+    - `sub understand_data_structure1(..)`
+  - [lib/Andiluca/Useful.pm](lib/Andiluca/Useful.pm)
+    - `sub assert(..)`
+    - `sub title(..)`
+  - [lib/Andiluca/Various.pm](lib/Andiluca/Various.pm)
+    - `sub parse_header(..)`
+    - `sub parse_decoration_divider(..)`
+    - `sub get_current_date_time_string()`
+    - `sub read_file(..)`
+    - `sub save_file(..)`
+    - `sub create_new_file_path(..)`
+- The exam-files are in the following subfolders:
+  - `AssignmentDataFiles/MasterFiles/`
+  - `AssignmentDataFiles/SampleResponses/`
+- Newly generated empty exam-files (with randomized answers) are saved in the subfolder
+  `Generated` where the given master-file resides, e.g.:
+  - `AssignmentDataFiles/MasterFiles/Generated/`
 
 
 ### Problems
-
+- At first, it was not easy to understand how to use the nested hash-array data-structure 
+  which the parser was able to produce. For this, we created our custom module 
+  [lib/Andiluca/Understand_Data_Structure.pm](lib/Andiluca/Understand_Data_Structure.pm).
+  - You can activate/deactivate the use of this module in the file [src/create.pl](src/create.pl) 
+  by (un-)commenting the line `# understand_data_structure1(\%parsed);`.
+- At some points, we had some different behaviour on the macOS-computer of Andreas and the 
+  linux-computer of Luca. But eventually the problems were solved (not yet clear why, maybe
+  just a simple computer reboot).
 
 ---
 ## Usage & Installation
@@ -89,7 +126,7 @@ generated with markdown-toc</a></i></small>
   - Text::Levenshtein::Damerau
 - We created custom modules -> in the folder `lib/Andiluca`. If you run the perl scripts 
   from the project-root, then these modules should be automatically detected and ready to 
-  use: For example `perl src/main.pl` should work, after you installed all required 
+  use: For example `perl src/create.pl` should work, after you installed all required 
   CPAN-Modules.
 
 ### Running the Scripts
@@ -97,15 +134,15 @@ generated with markdown-toc</a></i></small>
   CPAN-modules.
 - We have successfully tested the scripts on `macOS 10.15.6` and `Linux Ubuntu 18.04`.
 - For creating empty exam files (with randomized order of answers of each question), use the 
-  script `main.pl`:
+  script [src/create.pl](src/create.pl):
   - If you don't provide an argument, all the *.txt in the folder 
-    'AssignmentDataFiles/MasterFiles/' are processed for this script: `perl src/main.pl`
+    'AssignmentDataFiles/MasterFiles/' are processed for this script: `perl src/create.pl`
   - If you provide one argument, the script runs with the given file. Example: 
-  `perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt`
+  `perl src/create.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt`
   - The generated empty exams will be created in a subfolder named `/Generated`, 
     inside the directory of the provided file. Note: This subdirectory will be created if 
     not already present.
-- For generating the score of all the files, use the script `score.pl`:
+- For generating the score of all the files, use the script [src/score.pl](src/score.pl):
   - First parameter: Master-file
   - Second parameter: Student-file(s)
   - Example: `perl src/score.pl AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt AssignmentDataFiles/SampleResponses/*`
