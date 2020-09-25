@@ -4,6 +4,9 @@ use warnings;
 use diagnostics;
 use experimental ('signatures');
 use Data::Show;                           # Module for showing content of variables such as hashes
+use POSIX;
+use Lingua::StopWords qw( getStopWords );
+use Text::Levenshtein::Damerau qw/edistance/;
 use Term::ANSIColor ('color', 'colored');
 
 # Use/import our custom modules:
@@ -59,6 +62,27 @@ sub get_questions_and_answers(@parsed){
     return @all_questions;
 }
 
+# Normalizes String according by removing and simplifying whitespaces, lowercasing and removing stop words
+sub normalize($string){
+    my $stopwords = getStopWords('en');
+
+    $string = lc $string;
+    # Removes multiple whitespaces and stopwords
+    $string = join ' ', grep { !$stopwords->{$_} } split /\s+/, $string;
+    $string =~ s/^\s+|\s+$//g; #remove leading and trailing whitespaces
+
+    return $string;
+}
+
+# Compares 2 normalized strings and returns their edit distance;
+sub compare($s1, $s2){
+    $s1 = normalize($s1);
+    $s2 = normalize($s2);
+    # say $s1 . " vs. " . $s2;
+    my $maxDist = floor(length( $s2) * 0.1);
+    return $maxDist ? edistance($s1, $s2, $maxDist) : ($s1 eq $s2 ? 0 : -1);
+}
+
 
 # Compare and score the student exam with the master file
 sub score_exam($sf, @parsed_exam) {
@@ -95,8 +119,12 @@ sub score_exam($sf, @parsed_exam) {
             # Check for missing Answers
             my $contains = 0;
             for my $answer_student (@{$qa_student{'answer'}}) {
-                if($answer_student->{"text"} eq $answer->{"text"}){
+                my $cmp = compare($answer_student->{"text"}, $answer->{"text"});
+                if($cmp >= 0 ){
                     $contains = 1;
+                    if($cmp > 0){
+                        say 'Inexact Match [Answer], used: "' . $answer->{"text"} . '" instead of "' . $answer_student->{"text"} . '"';
+                    }
                     last;
                 }
             }
@@ -107,7 +135,7 @@ sub score_exam($sf, @parsed_exam) {
 
         # Check for missing Questions inside the Exam (not at the end)
         # Not matching question number -> missing question
-        while(@{$qa_master{"question"}}{"question_number"} ne @{$qa_student{"question"}}{"question_number"}){
+        while(compare(@{$qa_master{"question"}}{"question_number"}, @{$qa_student{"question"}}{"question_number"}) == -1){
             say "\t" . "Missing Question " . @{$qa_master{"question"}}{"question_number"} . "\n\t " . @{$qa_master{"question"}}{"text"};
             
             # Increase offset for next iteration
@@ -134,9 +162,13 @@ sub score_exam($sf, @parsed_exam) {
                 if($count == 1) {$answered_questions_count++;}
             
                 # If only 1 X and correct answer
-                if($count == 1 && $answer->{"text"} eq $correct_answer){
+                my $cmp = compare($answer->{"text"}, $correct_answer);
+                if($count == 1 && $cmp >= 0){
                     $correct_answers_count++;
                     $correct = 1;
+                    if($cmp > 0){
+                        say 'Inexact Match [Answer], used: "' . $correct_answer . '" instead of "' . $answer->{"text"} . '"';
+                    }
                 }
 
                 # Adjust count if more than 1 Answer selected
@@ -163,6 +195,11 @@ for my $sf (@student_file_paths){
 
 
     score_exam($sf, @parsed_exam);
+
+
+    # TODO TEST
+    # say compare("1.042e3", "1'042");
+
 }
 
 
