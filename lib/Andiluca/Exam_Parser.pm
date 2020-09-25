@@ -40,7 +40,7 @@ sub parsing_exam($bare_content) {
             \s* <checkbox> <text>
 
         <token: question_number>
-            \d+ \.
+            \s*\d+ \.
 
         <token: text>
             \N* \n                  # First line of text may be anything
@@ -48,7 +48,7 @@ sub parsing_exam($bare_content) {
                                     # The ? at the end modifies the * (0 or more) to "use the one with the least amount ???
 
         <token: checkbox>
-            \[ . \]
+            \[ \s*[^\]]*\s* \]
 
         <token: decoration>
             \N* \n
@@ -57,7 +57,18 @@ sub parsing_exam($bare_content) {
             \s* \n
     }xms;
 
-    
+
+    # Run the regex-grammar to create the hash-object:
+    if ($bare_content =~ $exam_parser) {
+        # NOTE: '%/' is a special variable from the Regexp-module to fetch the created data-structure:
+        my %parsed = %/;
+        return(\%parsed);
+    }
+
+    # If not successful, return undef:
+    else {
+        return undef;
+    }
 }
 
 
