@@ -7,6 +7,7 @@ use experimental ('signatures');
 use Exporter ('import');
 use Data::Show;                           # Module for showing content of variables such as hashes
 use List::Util ('shuffle');
+use Term::ANSIColor ('color', 'colored');
 
 
 our @EXPORT_OK = ('create_empty_random_exam');
@@ -49,10 +50,11 @@ sub create_empty_random_exam($parsed_reference, $header, $decoration_line) {
         }
     }
 
+    # Check if questions could be read and processed successfully:
     if ($amount_of_parsed_questions > 0) {
         return $file_content;
     } else {
-        return undef;
+        die colored([ 'red' ], 'Method "create_empty_random_exam(\%parsed)" failed!!');
     }
 }
 

@@ -4,6 +4,7 @@ use warnings;
 use diagnostics;
 use experimental ('signatures');
 use Data::Show;                           # Module for showing content of variables such as hashes
+use Term::ANSIColor ('color', 'colored');
 
 # Use/import our custom modules:
 use lib ('lib');                          # Includes local lib-folder -> for custom modules 'Andiluca::...'
@@ -11,6 +12,7 @@ use Andiluca::Useful ("title", "assert"); # Module with various useful code snip
 use Andiluca::Understand_Data_Structure ("understand_data_structure1");
 use Andiluca::Create_Empty_Random_Exam ("create_empty_random_exam");
 use Andiluca::Exam_Parser("parsing_exam");
+use Andiluca::Various('read_file');
 
 
 my $master_path;
@@ -40,22 +42,12 @@ else {
 
 
 # Reads file and returns bare content
-sub read_file($filepath) {
-    open my $fh, '<', $filepath or die "Cannot read '$filepath': $!\n";
-    my $bare_content = do {
-        local $/;
-        readline($fh)
-    };
-    close $fh;
-
-    return $bare_content;
-}
-
-
-my %parsed_master_hash = %{parsing_exam(read_file($master_path))};
+my $bare_content = read_file($master_path);
+my %parsed_master_hash = %{parsing_exam($bare_content)};
 my @parsed_master = get_questions_and_answers(@{$parsed_master_hash{'exam'}->{'exam_component'}});
 
 
+# Receive all questions and answers:
 sub get_questions_and_answers(@parsed){
     my @all_questions;
     for my $ref (@parsed) {
@@ -67,6 +59,7 @@ sub get_questions_and_answers(@parsed){
     return @all_questions;
 }
 
+
 # Compare and score the student exam with the master file
 sub score_exam($sf, @parsed_exam) {
     my $answered_questions_count = 0;
@@ -75,7 +68,7 @@ sub score_exam($sf, @parsed_exam) {
     # Index Offset used when a Question is missing in the middle of the Exam
     my $master_offset = 0;
     
-    say $sf . ":";
+    say colored(['yellow'], $sf . ":");
 
     # Loop through masterfile
     foreach my $i (0..((scalar @parsed_master)-1)){
@@ -155,8 +148,8 @@ sub score_exam($sf, @parsed_exam) {
         }
     }
 
+    # Print the results to the terminal:
     say "Score: \t" . $correct_answers_count . "/" . $answered_questions_count . "\n";
-
 }
 
 

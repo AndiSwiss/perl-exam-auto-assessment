@@ -65,9 +65,9 @@ sub parsing_exam($bare_content) {
         return(\%parsed);
     }
 
-    # If not successful, return undef:
+    # If not successful, throw a warning:
     else {
-        return undef;
+        die "Error with parsing the exam-file: Not a valid exam file!";
     }
 }
 
