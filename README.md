@@ -3,6 +3,7 @@
 #### Table of Content
 - [General](#general)
   - [Team](#team)
+  - [Solved parts of the assignments](#solved-parts-of-the-assignments)
 - [High-Level Overview](#high-level-overview)
   - [Implemented Features](#implemented-features)
   - [Data Structure](#data-structure)
@@ -31,6 +32,12 @@ generated with markdown-toc</a></i></small>
 - Andreas Ambühl - https://github.com/AndiSwiss
 - Luca Fluri - https://github.com/lucafluri
 
+
+### Solved parts of the assignments
+- We have solved the following parts of the assignment:
+  - Part 1
+  - Part 2
+  - Part of the tasks of part 3
 
 ---
 
