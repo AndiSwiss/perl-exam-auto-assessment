@@ -16,7 +16,7 @@ use Andiluca::Understand_Data_Structure ('understand_data_structure1');
 use Andiluca::Create_Empty_Random_Exam ('create_empty_random_exam');
 use Andiluca::Exam_Parser('parsing_exam');
 use Andiluca::Various('read_file');
-use Andiluca::Statistics('generate_statistics');
+use Andiluca::Statistics('print_statistics');
 
 
 my $master_path;
@@ -88,7 +88,7 @@ sub compare($s1, $s2, $question_number){
     my $ret = $maxDist ? edistance($s1, $s2, $maxDist) : ($s1 eq $s2 ? 0 : -1);
 
     if($ret > 0) {
-        say colored(['blue'], "\t" . 'Inexact Match in Question ' . $question_number . ', used: "' . $s2 . '" instead of "' . $s1 . '"');
+        say colored(['blue'], "\t" . 'Inexact match in question ' . $question_number . ', used: "' . $s2 . '" instead of "' . $s1 . '"');
     }
 
     return $ret;
@@ -207,6 +207,6 @@ for my $sf (@student_file_paths){
     score_exam($sf, @parsed_exam);
 }
 
-generate_statistics(\@correct_answers_count_total, \@answered_questions_count_total);
+print_statistics(\@correct_answers_count_total, \@answered_questions_count_total);
 
 
