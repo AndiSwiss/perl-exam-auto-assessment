@@ -11,6 +11,14 @@ use Regexp::Grammars;               # Module for using Grammars in Regex
 our @EXPORT_OK = ('parsing_exam');  # List of exported functions
 
 
+# Parses a given exam file and creates the nested hash-structure, which it returns.
+#
+# Parameters:
+#   - $bare_content: Multi-line string which contains the unprocessed file-content of the exam file
+# Returns:
+#   - Nested hash-structure as described in README.md, section 'Data Structure'
+# Error Handling:
+#   - Throws exception if the parser fails
 sub parsing_exam($bare_content) {
 
     # Define the regex grammar (using the module Regexp::Grammars):

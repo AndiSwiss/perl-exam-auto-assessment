@@ -15,6 +15,12 @@ use Andiluca::Various('parse_header', 'parse_decoration_divider', 'get_current_d
 use Andiluca::Exam_Parser('parsing_exam');
 
 
+# ------------------------------------------ #
+# Main script for creating empty exam files  #
+# with randomized answers for each question. #
+# ------------------------------------------ #
+
+# File-array containing all the file-paths of the given exam-files:
 my @files;
 
 # If the user doesn't provide an argument, all the *.txt in the folder 'AssignmentDataFiles/MasterFiles/' are used:
@@ -22,18 +28,32 @@ if (@ARGV == 0) {
     @files = glob("AssignmentDataFiles/MasterFiles/*.txt");
 }
 # Otherwise, a user can provide one or multiple file-paths to specific master-files:
+# File-globbing works as expected, e.g.:  ../my_subfolder/*.txt
 else {
     for my $file (@ARGV){
         push (@files, $file);
     }
 }
 
+# For each file, parse and generate the new empty exam file:
 for my $file (@files) {
     generate_exam($file);
 }
 
 
 
+# -------------------- #
+# VARIOUS SUB-ROUTINES #
+# -------------------- #
+
+# Reads the provided file, parses it and generates a new empty exam file with randomized answers:
+#
+# Parameters:
+#   - $filepath: Path to the file
+# Returns:
+#   - nothing
+# Error Handling:
+#   - The called subroutines may throw exceptions (as described in the header of each called subroutine)
 sub generate_exam($file_path) {
     say colored([ 'yellow' ], "Generating exam based on the file '$file_path':");
 
@@ -60,6 +80,7 @@ sub generate_exam($file_path) {
     my $randomized = create_empty_random_exam(\%parsed, $header, $decoration_line);
     my $date_and_time = get_current_date_time_string();
 
+
     # Create subdirectory /Generated, if not yet present:
     $file_path =~ m%(.*(.*/)*/)[^/]*$%;
     my $path_generated = $1 . "/Generated";
@@ -77,7 +98,7 @@ sub generate_exam($file_path) {
     $file_path =~ s%/([^/]*)$%/Generated/$date_and_time-$1%;
 
 
-    # Write the file to the disk
+    # Write the file to the disk:
     open(my $out_fh, ">", $file_path) // die colored([ 'red' ], "\nUnable to open file for write-access '$file_path':\n\t$!\n");
     say {$out_fh} $randomized;
     say colored([ 'green' ], "       Empty Exam-File created in '$file_path'.");

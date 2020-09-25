@@ -19,6 +19,10 @@ use Andiluca::Various('read_file');
 use Andiluca::Statistics('print_statistics');
 
 
+# ---------------------------------- #
+# Main script for scoring the exams, #
+# and creating some statistics.      #
+# ---------------------------------- #
 my $master_path;
 my @student_file_paths;
 
@@ -26,18 +30,15 @@ my @student_file_paths;
 my @correct_answers_count_total;
 my @answered_questions_count_total;
 
-# Open given file (or standard file):
+# Open given files (or standard files):
 if (@ARGV < 2) {
-    # die "Please provide a filepath, such as 'perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt'\n";
-
-    # Use standard-file:
+    # Use standard-files, if user doesn't provide enough arguments:
     my $file = "FHNW_entrance_exam_master_file_2017.txt";
     $master_path = "AssignmentDataFiles/MasterFiles/" . $file;
-
     $student_file_paths[0] = "AssignmentDataFiles/SampleResponses/20170828-092520-FHNW_entrance_exam-ID00001010"
 }
 else {
-    # Take provided filepath:
+    # Take provided file-paths:
     $master_path = $ARGV[0];
     for my $sf (@ARGV[1..((scalar @ARGV) -1)]){
         push @student_file_paths, $sf;
@@ -45,13 +46,34 @@ else {
 }
 
 
-# Reads file and returns bare content
+# Reading and parsing the master-file:
 my $bare_content = read_file($master_path);
 my %parsed_master_hash = %{parsing_exam($bare_content)};
 my @parsed_master = get_questions_and_answers(@{$parsed_master_hash{'exam'}->{'exam_component'}});
 
 
+# Loop through every student file and compare student file with master file:
+for my $sf (@student_file_paths){
+    my %parsed_exam_hash = %{parsing_exam(read_file($sf))};
+    my @parsed_exam = get_questions_and_answers(@{$parsed_exam_hash{'exam'}->{'exam_component'}});
+    score_exam($sf, @parsed_exam);
+}
+
+# Print the statistics:
+print_statistics(\@correct_answers_count_total, \@answered_questions_count_total);
+
+
+
+# -------------------- #
+# VARIOUS SUB-ROUTINES #
+# -------------------- #
+
 # Receive all questions and answers:
+#
+# Parameters:
+#   - @parsed
+# Returns:
+#   - array containing all the questions
 sub get_questions_and_answers(@parsed){
     my @all_questions;
     for my $ref (@parsed) {
@@ -63,7 +85,13 @@ sub get_questions_and_answers(@parsed){
     return @all_questions;
 }
 
-# Normalizes String according by removing and simplifying whitespaces, lowercasing and removing stop words
+
+# Normalizes String according by removing and simplifying whitespaces, lower-casing and removing stop words
+#
+# Parameters:
+#   - $string: string to be normalized
+# Returns:
+#   - normalized string
 sub normalize($string){
     my $stopwords = getStopWords('en');
 
@@ -75,9 +103,16 @@ sub normalize($string){
     return $string;
 }
 
-# Compares 2 normalized strings and returns their edit distance;
-# Returns 0 for exact match, and a positive number for an inexact match (where the positive number is the editing distance)
-# A return value of -1 means not equal!
+# Compares 2 normalized strings and returns their edit distance.
+#
+# Parameters:
+#   - $s1: first string
+#   - $s2: second string
+#   - $question_number
+# Returns:
+#   - 0 for exact match
+#   - A positive number for an inexact match (where the positive number is the editing distance)
+#   - A return value of -1 means not equal!
 sub compare($s1, $s2, $question_number){
     $s1 = normalize($s1);
     $s2 = normalize($s2);
@@ -95,7 +130,17 @@ sub compare($s1, $s2, $question_number){
 }
 
 
-# Compare and score the student exam with the master file
+# Compare and score the student exam with the master file.
+#
+# Parameters:
+#   - $sf: student-file
+#   - @parsed_exam: the parsed exam
+# Returns:
+#   - nothing
+# Side-Effects:
+#   - For the statistics, it will push the following values:
+#      - $correct_answers_count      to   @correct_answers_count_total
+#      - $answered_questions_count   to   @answered_questions_count_total
 sub score_exam($sf, @parsed_exam) {
     my $answered_questions_count = 0;
     my $correct_answers_count = 0;
@@ -189,24 +234,9 @@ sub score_exam($sf, @parsed_exam) {
     # Print the results to the terminal:
     say colored(['green'], "Score: \t" . $correct_answers_count . "/" . $answered_questions_count . "\n");
 
-    # Save counts
+    # Save counts for the statistics:
     push(@correct_answers_count_total, $correct_answers_count);
     push(@answered_questions_count_total, $answered_questions_count);
 }
-
-
-
-
-# Compare Student File with Master file
-# Loop through every Student File
-for my $sf (@student_file_paths){
-    my %parsed_exam_hash = %{parsing_exam(read_file($sf))};
-    my @parsed_exam = get_questions_and_answers(@{$parsed_exam_hash{'exam'}->{'exam_component'}});
-
-
-    score_exam($sf, @parsed_exam);
-}
-
-print_statistics(\@correct_answers_count_total, \@answered_questions_count_total);
 
 

@@ -10,7 +10,7 @@
   - [General Code Structure](#general-code-structure)
   - [Problems](#problems)
 - [Usage & Installation](#usage--installation)
-  - [(CPAN-)modules Used](#-cpan-modules-used)
+  - [(CPAN-)modules Used](#cpan-modules-used)
   - [Running the Scripts](#running-the-scripts)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents 
@@ -37,7 +37,7 @@ generated with markdown-toc</a></i></small>
 ## High-Level Overview
 
 ### Implemented Features
-- Create empty tests (with randomized order of answers of each question)
+- Create empty exams (with randomized order of answers of each question)
 - Generate score(s) of the provided exam(s), including analysis and colored output of:
   - Filename (yellow)
   - 'Missing answer' (red)
@@ -93,15 +93,16 @@ generated with markdown-toc</a></i></small>
   CPAN-Modules.
 
 ### Running the Scripts
-- Apart from the installation of the above mentioned CPAN-Modules, 
-- For creating empty tests (with randomized order of answers of each question), use the 
+- For running the scripts, you need `Perl v 3.8.5` installed with the above mentioned 
+  CPAN-modules.
+- We have successfully tested the scripts on `macOS 10.15.6` and `Linux Ubuntu 18.04`.
+- For creating empty exam files (with randomized order of answers of each question), use the 
   script `main.pl`:
-  - If the user doesn't provide an argument, all the *.txt in the folder 
+  - If you don't provide an argument, all the *.txt in the folder 
     'AssignmentDataFiles/MasterFiles/' are processed for this script: `perl src/main.pl`
-  - The user can provide one or multiple files as parameter 
   - If you provide one argument, the script runs with the given file. Example: 
   `perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt`
-  - The generated empty tests will be created in a subfolder named `/Generated`, 
+  - The generated empty exams will be created in a subfolder named `/Generated`, 
     inside the directory of the provided file. Note: This subdirectory will be created if 
     not already present.
 - For generating the score of all the files, use the script `score.pl`:
@@ -111,6 +112,6 @@ generated with markdown-toc</a></i></small>
   - Note: Calculating the score of many files can take a while, mostly because the 
     distance-algorithms take some time.
 - The script `statistics_stub.pl` is a helper file:
-  - With this, you can quickly try the statistics functionality with some stub test 
+  - With this, you can quickly try the statistics functionality with some stub exam 
     data (no pre-calculations needed)
 

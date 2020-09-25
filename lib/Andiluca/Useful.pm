@@ -10,31 +10,19 @@ use Term::ANSIColor ('color', 'colored');
 our @EXPORT_OK = ('assert', 'title');     # List of exported functions
 
 
-# ------ #
-# USAGE: #
-# ------ #
-# For using this module, call it with the package-name Andiluca::Useful and the names of the methods to be used, e.g.:
-#     use Andiluca::Useful ('assert', 'title');
-# NOTE:
-#  In IntelliJ, it works perfectly, if this module sits in the project root in the folder 'lib'.
-#  But when trying to execute a perl-script directly from the terminal, you have to make sure that this module
-#  is in one of the folders specified in the perllib-environment variable $PERL5LIB.
-#  You can check the current status of this variable in your terminal with the following command:
-#
-#     echo $PERL5LIB
-#
-#  If you want to just TEMPORARILY add this module to your $PERL5LIB (as long as your terminal is open), then
-#  you can simply run the following command in your console (adjust the path as needed):
-#
-#     export PERL5LIB="$HOME/IdeaProjects/FHNW_Perl_course_with_Damian_Conway/lib"
-#
-#  After this, it should work just fine!
 
-
-# ----------------------------------------------------------------- #
-# Assertion for testing equality of two values (string-comparison). #
-# Usage: Provide $actual, $expected and optionally a testname.      #
-# ----------------------------------------------------------------- #
+# Assertion for testing equality of two values (string-comparison).
+# The tests will have a colored output:
+#   - red: fail
+#   - green: pass
+# And the tests will be automatically numbered.
+#
+# Parameters:
+#   - $actual: actual result
+#   - $expected: expected result
+#   - $testname: (optional parameter, default: 'unnamed')
+# Returns:
+#   - Nothing
 sub assert($actual, $expected, $testname = "unnamed") {
     state $counter = 0;
     $counter++;
@@ -44,9 +32,15 @@ sub assert($actual, $expected, $testname = "unnamed") {
 }
 
 
-# ------------------------------ #
-# Title decoration - with color: #
-# ------------------------------ #
+
+# Title decoration - with color:
+#
+# Parameters:
+#   - $actual: actual result
+#   - $expected: expected result
+#   - $testname: (optional parameter, default: 'unnamed')
+# Returns:
+#   - Nothing
 sub title($title) {
     # Add a ':' at the end of the string if not already present:
     # $title .= ':' if (substr($title, -1) ne ':');     # Variation 1

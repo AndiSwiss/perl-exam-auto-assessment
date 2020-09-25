@@ -11,6 +11,13 @@ our @EXPORT_OK = ('print_statistics');     # List of exported functions
 
 
 # Print various statistics:
+# Parses a given exam file and creates the nested hash-structure, which it returns.
+#
+# Parameters:
+#   - $correct_answers_count_total_ref: Reference to the array of 'correct_answers_count_total'
+#   - $answered_questions_count_total_ref: Reference to the array of 'answered_questions_count_total'
+# Returns:
+#   - nothing
 sub print_statistics($correct_answers_count_total_ref, $answered_questions_count_total_ref) {
     # Title for Statistics section:
     print color('magenta');
@@ -47,8 +54,16 @@ sub print_statistics($correct_answers_count_total_ref, $answered_questions_count
 }
 
 
+# Helper-method for 'print_statistics(..)' which prints one specially formatted line.
+#
+# Parameters:
+#   - $text
+#   - $value
+# Returns:
+#   - nothing
 sub one_line($text, $value) {
     printf("%41s %4d\n", $text, $value);
 }
+
 
 1; # Magic true value that Perl requires for no good reason.

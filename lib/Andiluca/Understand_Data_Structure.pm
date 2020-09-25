@@ -11,7 +11,13 @@ our @EXPORT_OK = ('understand_data_structure1');     # List of exported function
 
 
 
-# Prints all questions and their respective correct answer to the terminal:
+# This is a helper method for us to understand the nested hash data structure and how we can use it.
+# It prints all questions and their respective correct answer to the terminal.
+#
+# Parameters:
+#   - $parsed_ref: Remember to pass the nested hash-object %parsed by reference: \%parsed
+# Returns:
+#   - Nothing
 sub understand_data_structure1($parsed_reference) {
     my %parsed = %{$parsed_reference};
 
@@ -84,8 +90,6 @@ sub understand_data_structure1($parsed_reference) {
         say " -> CORRECT ANSWER:  $correct_answer";
     }
 }
-
-
 
 
 
