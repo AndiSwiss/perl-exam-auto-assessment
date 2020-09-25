@@ -38,15 +38,15 @@ sub print_statistics($correct_answers_count_total_ref, $answered_questions_count
     $sum_answered += $_ for @answered_total;
 
     # Print the statistics values
-    one_line("Number of analysed exams.................", scalar(@correct_total));
+    print_one_line("Number of analysed exams.................", scalar(@correct_total));
     say "";
-    one_line("Average number of correct answers........", $sum_correct / @correct_total);
-    one_line("Minimum.....", $correct_total[0]);
-    one_line("Maximum.....", $correct_total[-1]);
+    print_one_line("Average number of correct answers........", $sum_correct / @correct_total);
+    print_one_line("Minimum.....", $correct_total[0]);
+    print_one_line("Maximum.....", $correct_total[-1]);
     say "";
-    one_line("Average number of questions answered.....", $sum_answered / @answered_total);
-    one_line("Minimum.....", $answered_total[0]);
-    one_line("Maximum.....", $answered_total[-1]);
+    print_one_line("Average number of questions answered.....", $sum_answered / @answered_total);
+    print_one_line("Minimum.....", $answered_total[0]);
+    print_one_line("Maximum.....", $answered_total[-1]);
 
     # Reset the terminal-color:
     say "-" x 46 . "\n";
@@ -61,7 +61,7 @@ sub print_statistics($correct_answers_count_total_ref, $answered_questions_count
 #   - $value
 # Returns:
 #   - nothing
-sub one_line($text, $value) {
+sub print_one_line($text, $value) {
     printf("%41s %4d\n", $text, $value);
 }
 
