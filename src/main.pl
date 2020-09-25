@@ -11,7 +11,7 @@ use lib ('lib');                          # Includes local lib-folder -> for cus
 use Andiluca::Useful ("title", "assert"); # Module with various useful code snippets
 use Andiluca::Understand_Data_Structure ("understand_data_structure1");
 use Andiluca::Create_Empty_Random_Exam ("create_empty_random_exam");
-use Andiluca::Various("parse_header", "parse_decoration_divider");
+use Andiluca::Various("parse_header", "parse_decoration_divider", "get_current_date_time_string");
 
 
 my $path;
@@ -21,11 +21,11 @@ if (@ARGV == 0) {
     # die "Please provide a filepath, such as 'perl src/main.pl AssignmentDataFiles/MasterFiles/short_exam_master_file.txt'\n";
 
     # Use one of the standard-files:
-    my $file = "FHNW_entrance_exam_master_file_2017.txt";
+    my $filename = "FHNW_entrance_exam_master_file_2017.txt";
     # my $file = "short_exam_master_file.txt";
 
     # Construct the path:
-    $path = "AssignmentDataFiles/MasterFiles/" . $file;
+    $path = "AssignmentDataFiles/MasterFiles/" . $filename;
 
 }
 else {
@@ -110,13 +110,24 @@ if ($bare_content =~ $exam_parser) {
     if (!defined $randomized) {
         warn colored([ 'red' ], 'Method "create_empty_random_exam(\%parsed)" failed!!');
     } else {
-        say $randomized;
         # TODO: write the file to disk
+
+        my $date_and_time = get_current_date_time_string();
+
+        # Create the path for the output-file:
+        # The path is generally the same, but with an added subfolder /Generated
+        # And the file name gets prefixed with date and time.
+        # Sample input:
+        #     AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt
+        # Sample output would be:
+        #     AssignmentDataFiles/MasterFiles/Generated/20170904-132602-FHNW_entrance_exam_master_file_2017.txt
+        $path =~ s%/([^/]*)$%/Generated/$date_and_time-$1%;
+        say $path;
+
+        open(my $out_fh, ">", $path) // die colored([ 'red' ], "\nUnable to open file for write-access '$path':\n\t$!\n");
+        say {$out_fh} $randomized;
+        close($out_fh);
     }
-
-
-
-
 
 
 }
