@@ -35,8 +35,20 @@ required CPAN-Modules.
   - First parameter: Master-file
   - Second parameter: Student-file(s)
   - example: `perl src/score.pl AssignmentDataFiles/MasterFiles/FHNW_entrance_exam_master_file_2017.txt AssignmentDataFiles/SampleResponses/*`
+- The script `statistics_stub.pl` is a helper file:
+  - With this, you can quickly try the statistics functionality with some stub test data (no pre-calculations needed)
 
 
+## Features
+- Create empty tests (with randomized order of answers of each question)
+- Generate score(s) of the provided exam(s), including analysis and colored output of:
+  - Filename (yellow)
+  - 'Missing answer' (red)
+  - 'Inexact match' (blue)
+  - 'score' including correct and answered questions (green)
+  - Note: we chose a colored output for easy identification of the various parts
+- Statistics:
+  - The statistics are generated and printed automatically when calculating the score(s) of file(s) 
 
 ## Caveats
 
