@@ -11,15 +11,20 @@ use Term::ANSIColor ('color', 'colored');
 
 # Use/import our custom modules:
 use lib ('lib');                          # Includes local lib-folder -> for custom modules 'Andiluca::...'
-use Andiluca::Useful ("title", "assert"); # Module with various useful code snippets
-use Andiluca::Understand_Data_Structure ("understand_data_structure1");
-use Andiluca::Create_Empty_Random_Exam ("create_empty_random_exam");
-use Andiluca::Exam_Parser("parsing_exam");
+use Andiluca::Useful ('title', 'assert'); # Module with various useful code snippets
+use Andiluca::Understand_Data_Structure ('understand_data_structure1');
+use Andiluca::Create_Empty_Random_Exam ('create_empty_random_exam');
+use Andiluca::Exam_Parser('parsing_exam');
 use Andiluca::Various('read_file');
+use Andiluca::Statistics('generate_statistics');
 
 
 my $master_path;
 my @student_file_paths;
+
+# For statistics:
+my @correct_answers_count_total;
+my @answered_questions_count_total;
 
 # Open given file (or standard file):
 if (@ARGV < 2) {
@@ -92,6 +97,7 @@ sub score_exam($sf, @parsed_exam) {
     # Index Offset used when a Question is missing in the middle of the Exam
     my $master_offset = 0;
     
+    say colored(['yellow'], "\n\n" . "-" x (length($sf) + 1));
     say colored(['yellow'], $sf . ":");
 
     # Loop through masterfile
@@ -181,7 +187,11 @@ sub score_exam($sf, @parsed_exam) {
     }
 
     # Print the results to the terminal:
-    say "Score: \t" . $correct_answers_count . "/" . $answered_questions_count . "\n";
+    say colored(['green'], "Score: \t" . $correct_answers_count . "/" . $answered_questions_count . "\n");
+
+    # Save counts
+    push(@correct_answers_count_total, $correct_answers_count);
+    push(@answered_questions_count_total, $answered_questions_count);
 }
 
 
@@ -202,6 +212,6 @@ for my $sf (@student_file_paths){
 
 }
 
-
+generate_statistics(\@correct_answers_count_total, \@answered_questions_count_total);
 
 
