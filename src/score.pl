@@ -75,12 +75,18 @@ sub normalize($string){
 }
 
 # Compares 2 normalized strings and returns their edit distance;
-sub compare($s1, $s2){
+sub compare($s1, $s2, $question_number){
     $s1 = normalize($s1);
     $s2 = normalize($s2);
     # say $s1 . " vs. " . $s2;
     my $maxDist = floor(length( $s2) * 0.1);
-    return $maxDist ? edistance($s1, $s2, $maxDist) : ($s1 eq $s2 ? 0 : -1);
+    my $ret = $maxDist ? edistance($s1, $s2, $maxDist) : ($s1 eq $s2 ? 0 : -1);
+
+    if($ret > 0) {
+        say colored(['blue'], "\t" . 'Inexact Match in Question ' . $question_number . ', used: "' . $s2 . '" instead of "' . $s1 . '"');
+    }
+
+    return $ret;
 }
 
 
@@ -103,7 +109,7 @@ sub score_exam($sf, @parsed_exam) {
 
         # Check for missing Question at the end of the file
         if(!exists($parsed_exam[$i])){ 
-            say "\t" . "Missing Question " . @{$qa_master{"question"}}{"question_number"} . "\n\t " . @{$qa_master{"question"}}{"text"};
+            say colored(['red'], "\t" . "Missing Question " . @{$qa_master{"question"}}{"question_number"} . "\n\t " . $qa_master{"question"}{"text"});
             next;
         }
 
@@ -119,24 +125,21 @@ sub score_exam($sf, @parsed_exam) {
             # Check for missing Answers
             my $contains = 0;
             for my $answer_student (@{$qa_student{'answer'}}) {
-                my $cmp = compare($answer_student->{"text"}, $answer->{"text"});
+                my $cmp = compare($answer_student->{"text"}, $answer->{"text"}, $qa_master{"question"}{"question_number"});
                 if($cmp >= 0 ){
                     $contains = 1;
-                    if($cmp > 0){
-                        say 'Inexact Match [Answer], used: "' . $answer->{"text"} . '" instead of "' . $answer_student->{"text"} . '"';
-                    }
                     last;
                 }
             }
             if($contains == 0){
-                say "\t" . "Missing answer in question " . @{$qa_master{"question"}}{"question_number"} . ":\n\t " . $answer->{"text"}; 
+                say colored(['red'], "\t" . "Missing answer in question " . @{$qa_master{"question"}}{"question_number"} . ":\n\t " . $answer->{"text"}); 
             }
         }
 
         # Check for missing Questions inside the Exam (not at the end)
         # Not matching question number -> missing question
-        while(compare(@{$qa_master{"question"}}{"question_number"}, @{$qa_student{"question"}}{"question_number"}) == -1){
-            say "\t" . "Missing Question " . @{$qa_master{"question"}}{"question_number"} . "\n\t " . @{$qa_master{"question"}}{"text"};
+        while(compare(@{$qa_master{"question"}}{"question_number"}, @{$qa_student{"question"}}{"question_number"}, $qa_master{"question"}{"question_number"}) == -1){
+            say colored(['red'], "\t" . "Missing Question " . @{$qa_master{"question"}}{"question_number"} . "\n\t " . @{$qa_master{"question"}}{"text"});
             
             # Increase offset for next iteration
             $master_offset++;
@@ -162,13 +165,10 @@ sub score_exam($sf, @parsed_exam) {
                 if($count == 1) {$answered_questions_count++;}
             
                 # If only 1 X and correct answer
-                my $cmp = compare($answer->{"text"}, $correct_answer);
+                my $cmp = compare($answer->{"text"}, $correct_answer, @{$qa_master{"question"}}{"question_number"});
                 if($count == 1 && $cmp >= 0){
                     $correct_answers_count++;
                     $correct = 1;
-                    if($cmp > 0){
-                        say 'Inexact Match [Answer], used: "' . $correct_answer . '" instead of "' . $answer->{"text"} . '"';
-                    }
                 }
 
                 # Adjust count if more than 1 Answer selected
@@ -195,11 +195,6 @@ for my $sf (@student_file_paths){
 
 
     score_exam($sf, @parsed_exam);
-
-
-    # TODO TEST
-    # say compare("1.042e3", "1'042");
-
 }
 
 
